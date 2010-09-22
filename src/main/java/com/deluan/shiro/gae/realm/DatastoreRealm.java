@@ -17,11 +17,12 @@ import java.util.logging.Logger;
  */
 public class DatastoreRealm extends AuthorizingRealm {
 
-    static final String USER_STORE = "Users";
+    static final String DEFAULT_USER_STORE_KIND = "ShiroUsers";
 
     static final Logger log = Logger.getLogger("com.deluan.shiro.gae.realm.DatastoreRealm");
     private CredentialsMatcher credentialsMatcher;
     private DatastoreService datastoreService;
+    private String userStoreKind = DEFAULT_USER_STORE_KIND;
 
     public DatastoreRealm() {
         this.datastoreService = DatastoreServiceFactory.getDatastoreService();
@@ -59,7 +60,7 @@ public class DatastoreRealm extends AuthorizingRealm {
     }
 
     private Entity findByUsername(String username) {
-        Query query = new Query(USER_STORE);
+        Query query = new Query(DEFAULT_USER_STORE_KIND);
         query.addFilter("username", Query.FilterOperator.EQUAL, username);
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         return preparedQuery.asSingleEntity();
@@ -72,6 +73,10 @@ public class DatastoreRealm extends AuthorizingRealm {
 
     public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
         this.credentialsMatcher = credentialsMatcher;
+    }
+
+    public void setUserStoreKind(String userStoreKind) {
+        this.userStoreKind = userStoreKind;
     }
 
     private Boolean doCredentialsMatch(AuthenticationToken authToken, SimpleAccount account) {

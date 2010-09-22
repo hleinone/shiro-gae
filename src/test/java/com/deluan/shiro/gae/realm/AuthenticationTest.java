@@ -21,7 +21,7 @@ public class AuthenticationTest {
     private DatastoreRealm datastoreRealm;
 
     private Entity createUser(String username, String password) {
-        Entity entity = new Entity(DatastoreRealm.USER_STORE);
+        Entity entity = new Entity(DatastoreRealm.DEFAULT_USER_STORE_KIND);
         entity.setProperty("username", username);
         entity.setProperty("passwordHash", new Sha512Hash(password).toHex());
         return entity;
@@ -36,7 +36,7 @@ public class AuthenticationTest {
         ds.put(createUser("user2", "pass2"));
         ds.put(createUser("user3", "pass3"));
 
-        Query query = new Query(DatastoreRealm.USER_STORE);
+        Query query = new Query(DatastoreRealm.DEFAULT_USER_STORE_KIND);
         PreparedQuery preparedQuery = ds.prepare(query);
         assertEquals(3, preparedQuery.countEntities());
 

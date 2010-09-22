@@ -1,6 +1,5 @@
-package com.deluan.shiro.cache;
+package com.deluan.shiro.cache.gae;
 
-import com.deluan.shiro.cache.gae.MemcacheManager;
 import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import org.apache.shiro.cache.Cache;

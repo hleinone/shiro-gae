@@ -27,7 +27,6 @@
                     <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
-<!--
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.6</version>
@@ -40,7 +39,6 @@
                     </execution>
                 </executions>
             </plugin>
--->
             <plugin>
                 <groupId>net.kindleit</groupId>
                 <artifactId>maven-gae-plugin</artifactId>
@@ -53,7 +51,6 @@
                         <type>pom</type>
                     </dependency>
                 </dependencies>
-<!--
                 <executions>
                     <execution>
                         <id>inicia-servidor</id>
@@ -70,7 +67,6 @@
                         </goals>
                     </execution>
                 </executions>
--->
             </plugin>
         </plugins>
     </build>
@@ -103,5 +99,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>maven-gae-plugin-repo</id>
+            <name>Maven Google App Engine Repository</name>
+            <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+        </repository>
+    </repositories>
 
 </project>

@@ -1,4 +1,4 @@
-package com.deluan.shiro.cache;
+package com.deluan.shiro.cache.gae;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import org.apache.shiro.cache.Cache;

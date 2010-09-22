@@ -1,5 +1,6 @@
 package com.deluan.shiro.cache;
 
+import com.deluan.shiro.cache.gae.MemcacheManager;
 import org.apache.shiro.cache.Cache;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class MemcacheTest {
+public class MemcacheITCase {
 
     private MemcacheManager cacheManager;
     private Cache<Object, Object> cache;

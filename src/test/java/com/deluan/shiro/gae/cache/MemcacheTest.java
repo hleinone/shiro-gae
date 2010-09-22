@@ -1,4 +1,4 @@
-package com.deluan.shiro.cache.gae;
+package com.deluan.shiro.gae.cache;
 
 import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -15,7 +15,6 @@ public class MemcacheTest {
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalMemcacheServiceTestConfig());
 
-    private MemcacheManager cacheManager;
     private Cache<Object, Object> cache;
 
     @Before
@@ -30,7 +29,7 @@ public class MemcacheTest {
 
     @Before
     public void createCache() {
-        cacheManager = new MemcacheManager();
+        MemcacheManager cacheManager = new MemcacheManager();
         cache = cacheManager.getCache("teste");
     }
 

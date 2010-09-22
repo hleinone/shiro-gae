@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Shiro GAE Adapter</name>
+    <name>Apache Shiro :: Google App Engine</name>
     <groupId>com.deluan.shiro-gae</groupId>
     <artifactId>shiro-gae</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -72,6 +72,12 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
             <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.6</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

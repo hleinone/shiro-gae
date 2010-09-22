@@ -2,8 +2,6 @@ package com.deluan.shiro.gae.realm;
 
 import com.google.appengine.api.datastore.*;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.Sha512CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -20,7 +18,6 @@ public class DatastoreRealm extends AuthorizingRealm {
     static final String DEFAULT_USER_STORE_KIND = "ShiroUsers";
 
     static final Logger log = Logger.getLogger("com.deluan.shiro.gae.realm.DatastoreRealm");
-    private CredentialsMatcher credentialsMatcher;
     private DatastoreService datastoreService;
     private String userStoreKind = DEFAULT_USER_STORE_KIND;
 
@@ -49,13 +46,7 @@ public class DatastoreRealm extends AuthorizingRealm {
 
         log.info("Found user " + username + " in DB");
 
-        // Now check the user's password against the hashed value stored
-        // in the database.
         SimpleAccount account = new SimpleAccount(username, user.getProperty("passwordHash"), "DatastoreRealm");
-        if (!doCredentialsMatch(token, account)) {
-            log.info("Invalid password (Datastore Realm)");
-            throw new IncorrectCredentialsException("Invalid password for user '" + username + "'");
-        }
 
         return account;
     }
@@ -72,18 +63,8 @@ public class DatastoreRealm extends AuthorizingRealm {
         return null;  // TODO
     }
 
-    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-        this.credentialsMatcher = credentialsMatcher;
-    }
-
     public void setUserStoreKind(String userStoreKind) {
         this.userStoreKind = userStoreKind;
     }
 
-    private Boolean doCredentialsMatch(AuthenticationToken authToken, SimpleAccount account) {
-        if (credentialsMatcher == null) {
-            credentialsMatcher = new Sha512CredentialsMatcher();
-        }
-        return credentialsMatcher.doCredentialsMatch(authToken, account);
-    }
 }

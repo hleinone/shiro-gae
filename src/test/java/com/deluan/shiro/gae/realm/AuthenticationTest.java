@@ -5,6 +5,7 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.Sha512CredentialsMatcher;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.junit.After;
 import org.junit.Before;
@@ -41,6 +42,7 @@ public class AuthenticationTest {
         assertEquals(3, preparedQuery.countEntities());
 
         datastoreRealm = new DatastoreRealm();
+        datastoreRealm.setCredentialsMatcher(new Sha512CredentialsMatcher());
     }
 
     @After
@@ -51,7 +53,7 @@ public class AuthenticationTest {
     @Test
     public void testUserValid() {
         UsernamePasswordToken token = new UsernamePasswordToken("user1", "pass1");
-        AuthenticationInfo info = datastoreRealm.doGetAuthenticationInfo(token);
+        AuthenticationInfo info = datastoreRealm.getAuthenticationInfo(token);
         assertNotNull(info);
         assertEquals("user1", info.getPrincipals().iterator().next());
     }
@@ -59,19 +61,19 @@ public class AuthenticationTest {
     @Test(expected = org.apache.shiro.authc.IncorrectCredentialsException.class)
     public void testPasswordInvalid() {
         UsernamePasswordToken token = new UsernamePasswordToken("user1", "pass2");
-        datastoreRealm.doGetAuthenticationInfo(token);
+        datastoreRealm.getAuthenticationInfo(token);
     }
 
     @Test(expected = org.apache.shiro.authc.UnknownAccountException.class)
     public void testUserNotFound() {
         UsernamePasswordToken token = new UsernamePasswordToken("inexistent", "password");
-        datastoreRealm.doGetAuthenticationInfo(token);
+        datastoreRealm.getAuthenticationInfo(token);
     }
 
     @Test(expected = org.apache.shiro.authc.AccountException.class)
     public void testNullUsername() {
         UsernamePasswordToken token = new UsernamePasswordToken(null, "password");
-        datastoreRealm.doGetAuthenticationInfo(token);
+        datastoreRealm.getAuthenticationInfo(token);
     }
 
     @Test(expected = org.apache.shiro.authc.AccountException.class)

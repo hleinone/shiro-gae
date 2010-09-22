@@ -25,6 +25,7 @@ public class DatastoreRealm extends AuthorizingRealm {
     private String userStoreKind = DEFAULT_USER_STORE_KIND;
 
     public DatastoreRealm() {
+        log.info("Creating a new instance of DatastoreRealm");
         this.datastoreService = DatastoreServiceFactory.getDatastoreService();
     }
 

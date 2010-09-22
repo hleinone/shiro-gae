@@ -61,7 +61,7 @@ public class DatastoreRealm extends AuthorizingRealm {
     }
 
     private Entity findByUsername(String username) {
-        Query query = new Query(DEFAULT_USER_STORE_KIND);
+        Query query = new Query(userStoreKind);
         query.addFilter("username", Query.FilterOperator.EQUAL, username);
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         return preparedQuery.asSingleEntity();

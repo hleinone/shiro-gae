@@ -26,22 +26,26 @@ public class Memcache<K, V> implements Cache<K, V> {
     }
 
     public V remove(K k) throws CacheException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        V oldValue = get(k);
+        memcacheService.delete(k);
+        return oldValue;
     }
 
     public void clear() throws CacheException {
-        //To change body of implemented methods use File | Settings | File Templates.
+        memcacheService.clearAll();
     }
 
     public int size() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return (int) memcacheService.getStatistics().getItemCount();
     }
 
     public Set<K> keys() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        // FIXME How to implement this?! Is it really necessery?
+        return null;
     }
 
     public Collection<V> values() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        // FIXME How to implement this?! Is it really necessery?
+        return null;
     }
 }

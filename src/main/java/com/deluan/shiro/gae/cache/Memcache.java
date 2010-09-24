@@ -40,12 +40,12 @@ public class Memcache<K, V> implements Cache<K, V> {
     }
 
     public Set<K> keys() {
-        // FIXME How to implement this?! Is it really necessery?
+        // FIXME How to implement this?! Is it really necessary?
         return null;
     }
 
     public Collection<V> values() {
-        // FIXME How to implement this?! Is it really necessery?
+        // FIXME How to implement this?! Is it really necessary?
         return null;
     }
 }

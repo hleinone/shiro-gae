@@ -126,14 +126,13 @@
     <!-- Deploy configuration based on http://www.beeworks.be/hosting-maven-repository-google-code/ -->
     <distributionManagement>
         <repository>
-            <id>googlecode.shiro-gae.repo</id>
-            <url>dav:https://shiro-gae.googlecode.com/svn/repository</url>
+            <id>googlecode.deluan.repo</id>
+            <url>dav:https://deluan.googlecode.com/svn/releases</url>
         </repository>
         <snapshotRepository>
-            <id>googlecode.shiro-gae.snapshotrepo</id>
-            <url>dav:https://shiro-gae.googlecode.com/svn/snapshot-repository</url>
+            <id>googlecode.deluan.snapshotrepo</id>
+            <url>dav:https://deluan.googlecode.com/svn/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
-
 </project>

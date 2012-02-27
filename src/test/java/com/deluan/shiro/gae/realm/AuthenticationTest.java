@@ -1,23 +1,31 @@
 package com.deluan.shiro.gae.realm;
 
-import com.google.appengine.api.datastore.*;
-import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.Sha512CredentialsMatcher;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
 public class AuthenticationTest {
 
     private final LocalServiceTestHelper helper =
         new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+    private final CredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher(Sha512Hash.ALGORITHM_NAME);
 
     private DatastoreRealm datastoreRealm;
 
@@ -39,10 +47,10 @@ public class AuthenticationTest {
 
         Query query = new Query(DatastoreRealm.DEFAULT_USER_STORE_KIND);
         PreparedQuery preparedQuery = ds.prepare(query);
-        assertEquals(3, preparedQuery.countEntities());
+        assertEquals(3, preparedQuery.countEntities(FetchOptions.Builder.withLimit(5)));
 
         datastoreRealm = new DatastoreRealm();
-        datastoreRealm.setCredentialsMatcher(new Sha512CredentialsMatcher());
+        datastoreRealm.setCredentialsMatcher(credentialsMatcher);
     }
 
     @After

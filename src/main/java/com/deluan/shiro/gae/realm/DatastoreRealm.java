@@ -1,70 +1,86 @@
 package com.deluan.shiro.gae.realm;
 
-import com.google.appengine.api.datastore.*;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AccountException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAccount;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 /**
- * User: deluan
- * Date: Sep 21, 2010
- * Time: 9:32:45 PM
+ * @author deluan
+ * @author hleinone
  */
 public class DatastoreRealm extends AuthorizingRealm {
+	public static final String DEFAULT_USER_STORE_KIND = "ShiroUsers";
 
-    static final String DEFAULT_USER_STORE_KIND = "ShiroUsers";
+	private static final Logger logger = LoggerFactory
+			.getLogger(DatastoreRealm.class);
+	private final DatastoreService datastoreService;
+	private final String userStoreKind;
 
-    static final Logger log = Logger.getLogger("com.deluan.shiro.gae.realm.DatastoreRealm");
-    private DatastoreService datastoreService;
-    private String userStoreKind = DEFAULT_USER_STORE_KIND;
+	public DatastoreRealm() {
+		this(DEFAULT_USER_STORE_KIND);
+	}
 
-    public DatastoreRealm() {
-        log.info("Creating a new instance of DatastoreRealm");
-        this.datastoreService = DatastoreServiceFactory.getDatastoreService();
-    }
+	public DatastoreRealm(String userStoreKind) {
+		this(DatastoreServiceFactory.getDatastoreService(), userStoreKind);
+	}
 
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String username = ((UsernamePasswordToken)token).getUsername();
-        log.info("Attempting to authenticate " + username + " in DB realm...");
+	private DatastoreRealm(DatastoreService datastoreService,
+			String userStoreKind) {
+		logger.info("Creating a new instance of DatastoreRealm");
+		this.datastoreService = datastoreService;
+		this.userStoreKind = userStoreKind;
+	}
 
-        // Null username is invalid
-        if (username == null) {
-            throw new AccountException("Null usernames are not allowed by this realm.");
-        }
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(
+			AuthenticationToken token) throws AuthenticationException {
+		final String username = ((UsernamePasswordToken) token).getUsername();
+		logger.info("Attempting to authenticate " + username
+				+ " in DB realm...");
 
-        // Get the user with the given username. If the user is not
-        // found, then they don't have an account and we throw an
-        // exception.
-        Entity user = findByUsername(username);
-        if (user == null) {
-            throw new UnknownAccountException("No account found for user '" + username + "'");
-        }
+		// Null username is invalid
+		if (username == null)
+			throw new AccountException(
+					"Null usernames are not allowed by this realm.");
 
-        log.info("Found user " + username + " in DB");
+		// Get the user with the given username. If the user is not
+		// found, then they don't have an account and we throw an
+		// exception.
+		final Entity user = findByUsername(username);
+		if (user == null)
+			throw new UnknownAccountException("No account found for user '"
+					+ username + "'");
 
-        SimpleAccount account = new SimpleAccount(username, user.getProperty("passwordHash"), "DatastoreRealm");
+		logger.info("Found user " + username + " in DB");
 
-        return account;
-    }
+		return new SimpleAccount(username, user.getProperty("passwordHash"),
+				"DatastoreRealm");
+	}
 
-    private Entity findByUsername(String username) {
-        Query query = new Query(userStoreKind);
-        query.addFilter("username", Query.FilterOperator.EQUAL, username);
-        PreparedQuery preparedQuery = datastoreService.prepare(query);
-        return preparedQuery.asSingleEntity();
-    }
+	private Entity findByUsername(String username) {
+		final Query query = new Query(userStoreKind).addFilter("username", Query.FilterOperator.EQUAL, username);
+		final PreparedQuery preparedQuery = datastoreService.prepare(query);
+		return preparedQuery.asSingleEntity();
+	}
 
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;  // TODO
-    }
-
-    public void setUserStoreKind(String userStoreKind) {
-        this.userStoreKind = userStoreKind;
-    }
-
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(
+			PrincipalCollection principals) {
+		return null; // TODO
+	}
 }

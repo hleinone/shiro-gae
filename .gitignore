@@ -1,5 +1,10 @@
+.classpath
+.project
+.settings
+wagon-git
 .idea
 *.ipr
 *.iml
 *.iws
 target
+

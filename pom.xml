@@ -9,9 +9,15 @@
     <artifactId>shiro-gae</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+	<scm>
+		<connection>scm:git:git@github.com:hleinone/shiro-gae.git</connection>
+		<developerConnection>scm:git:git@github.com:hleinone/shiro-gae.git</developerConnection>
+		<url>https://github.com/hleinone/shiro-gae</url>
+	</scm>
+
     <properties>
-        <gae.version>1.3.7</gae.version>
-        <shiro.version>1.0.0-incubating</shiro.version>
+        <gae.version>1.6.1</gae.version>
+        <shiro.version>1.2.0</shiro.version>
         <gae.home>
             ${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}
         </gae.home>
@@ -39,15 +45,7 @@
             <plugin>
                 <groupId>net.kindleit</groupId>
                 <artifactId>maven-gae-plugin</artifactId>
-                <version>0.7.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.kindleit</groupId>
-                        <artifactId>gae-runtime</artifactId>
-                        <version>1.3.7.1</version>
-                        <type>pom</type>
-                    </dependency>
-                </dependencies>
+                <version>0.9.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
@@ -61,15 +59,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.2.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
         </plugins>
 
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-        </extensions>
+		<extensions>
+			<extension>
+				<groupId>ar.com.synergian</groupId>
+				<artifactId>wagon-git</artifactId>
+				<version>0.1.4</version>
+			</extension>
+		</extensions>
     </build>
 
     <dependencies>
@@ -104,35 +117,39 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.5.6</version>
+            <version>1.6.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <version>4.9</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>maven-gae-plugin-repo</id>
-            <name>Maven Google App Engine Repository</name>
-            <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
-        </repository>
-    </repositories>
+	<distributionManagement>
+		<repository>
+			<id>javanto-releases</id>
+			<url>git:releases://git@github.com:javanto/repository.git</url>
+		</repository>
+		<snapshotRepository>
+			<id>javanto-snapshots</id>
+			<uniqueVersion>false</uniqueVersion>
+			<url>git:snapshots://git@github.com:javanto/repository.git</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-    <!-- Deploy configuration based on http://www.beeworks.be/hosting-maven-repository-google-code/ -->
-    <distributionManagement>
-        <repository>
-            <id>googlecode.deluan.repo</id>
-            <url>dav:https://deluan.googlecode.com/svn/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>googlecode.deluan.snapshotrepo</id>
-            <url>dav:https://deluan.googlecode.com/svn/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>synergian-repo</id>
+			<url>https://raw.github.com/synergian/wagon-git/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>

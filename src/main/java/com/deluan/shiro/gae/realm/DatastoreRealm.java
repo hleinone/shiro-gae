@@ -29,7 +29,7 @@ public class DatastoreRealm extends AuthorizingRealm {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DatastoreRealm.class);
 	private final DatastoreService datastoreService;
-	private final String userStoreKind;
+	private String userStoreKind;
 
 	public DatastoreRealm() {
 		this(DEFAULT_USER_STORE_KIND);
@@ -83,4 +83,8 @@ public class DatastoreRealm extends AuthorizingRealm {
 			PrincipalCollection principals) {
 		return null; // TODO
 	}
+
+    public void setUserStoreKind(String userStoreKind) {
+        this.userStoreKind = userStoreKind;
+    }
 }
